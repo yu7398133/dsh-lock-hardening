@@ -1,0 +1,16 @@
+--- a/presets/liangshen/agent.cordis.yml
++++ b/presets/liangshen/agent.cordis.yml
+@@ -367,8 +367,11 @@
+         enableRunInBackground: false
+         maxDepth: provider-managed
+ 
+-    - id: workflow-worker-thread
+-      name: '@deepseek-ai/dsh-workflow-worker-thread'
++    # The workflow engine backing `ralph` below. The shipped row named
++    # '@deepseek-ai/dsh-workflow-worker-thread', a package no released dsh
++    # ships; the engine that actually exists in this runtime is workflow-ptc.
++    - id: workflow-ptc
++      name: '@deepseek-ai/dsh-workflow-ptc'
+       config:
+         provider: spawn
+ 
