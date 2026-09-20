@@ -1,14 +1,16 @@
 --- a/presets/liangshen/agent.cordis.yml
 +++ b/presets/liangshen/agent.cordis.yml
-@@ -367,8 +367,11 @@
+@@ -378,8 +378,13 @@
          enableRunInBackground: false
          maxDepth: provider-managed
  
 -    - id: workflow-worker-thread
 -      name: '@deepseek-ai/dsh-workflow-worker-thread'
-+    # The workflow engine backing `ralph` below. The shipped row named
++    # PATCHED (0.3.24 still ships the broken row): the shipped name below is
 +    # '@deepseek-ai/dsh-workflow-worker-thread', a package no released dsh
-+    # ships; the engine that actually exists in this runtime is workflow-ptc.
++    # ships, so the row cannot resolve; the engine that actually exists in this
++    # runtime is workflow-ptc. Unresolvable AND load-bearing, because 'ralph'
++    # further down is enabled and injects the engine.
 +    - id: workflow-ptc
 +      name: '@deepseek-ai/dsh-workflow-ptc'
        config:
