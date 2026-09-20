@@ -102,6 +102,7 @@ cat "$DSH_HOME/lock-sweeper/status.json"
 | --- | --- |
 | `apply-atomic-write-patch.mjs` | The fix: idempotent, self-verifying patch |
 | `atomic-write-reclaim.patch` | The raw diff against `dsh-atomic-write` 0.1.6-alpha.2 |
+| `patches/liangshen-workflow-engine.patch` | Fix for an unrelated third-party plugin (`@linxin666/dsh-liangshen`) |
 | `plugin/lock-sweeper.mjs` | Recovery layer that survives upgrades |
 | `upstream-issue.md` | Ready-to-file bug report: repro, evidence, root cause, fix |
 | `README.zh-CN.md` | Chinese version of this document |
