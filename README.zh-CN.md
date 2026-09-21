@@ -53,7 +53,7 @@ node /vol1/@appdata/deepseek.harness/dsh-data/lock-hardening/apply-atomic-write-
 
 原文件备份在同目录 `index.js.orig`。
 
-### 第二层：自愈插件（兜底）—— `../../profiles/web/lock-sweeper.mjs`
+### 第二层：自愈插件（兜底）—— `plugin/lock-sweeper.mjs`
 
 挂在 profile 里，**启动时扫一遍 + 每 60 秒扫一遍**，自动回收"持有者已死"的锁。
 它不阻止孤儿锁产生，但它是**唯一能活过 dsh 升级**的那一层，并且覆盖补丁管不到的地方
@@ -90,3 +90,17 @@ cat /vol1/@appdata/deepseek.harness/dsh-data/lock-sweeper/status.json
 - 存活检测是**本机语义**。如果 profile 目录放在共享存储（NFS/SMB）上，别的主机持有的锁
   在本机看会是"死的"。不要在这种目录上启用。
 - PID 复用只会让死锁看起来像"活着" → 不回收（偏保守，安全）。
+
+## 另外：梁神模式（@linxin666/dsh-liangshen）的修复
+
+跟锁无关，只是放在同一个仓库里，详见 [patches/README.md](patches/README.md)。
+
+1. **预设引用了不存在的包**：`@deepseek-ai/dsh-workflow-worker-thread` 在 dsh 0.1.6 已被移除，
+   而该行同时是启用的 `tool-ralph` 的引擎依赖。0.3.24 与上游 `dev` 分支**都还没修**。
+   修法是换成实际存在的 `@deepseek-ai/dsh-workflow-ptc`（与 dsh 自带 `standard` 预设同一行）。
+2. **插件被挂载两次**：包一旦回到 `dsh.profile.bundles`，它自带的 loader 行就会生效；此时用户层
+   再补一行就变成"重复启用插件"。**一个包只能有一个挂载点**，可用
+   `dsh --profile web --dump-config | grep -cE '^- id: liangshen`' 验证（应为 1）。
+
+注意：插件 mount 时会把预设复制到 `$DSH_HOME/.agent-presets/liangshen/`，session 实际读的是那份副本；
+改完包内文件必须让副本重新同步，否则会误以为"改了没用"。
