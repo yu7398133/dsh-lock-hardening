@@ -104,3 +104,17 @@ cat /vol1/@appdata/deepseek.harness/dsh-data/lock-sweeper/status.json
 
 注意：插件 mount 时会把预设复制到 `$DSH_HOME/.agent-presets/liangshen/`，session 实际读的是那份副本；
 改完包内文件必须让副本重新同步，否则会误以为"改了没用"。
+
+插件升级会重装 `node_modules`，把这个失效行**原样带回来**，所以每次升级后要重打一次。
+仓库根的 `apply-liangshen-workflow-engine-patch.mjs` 一次改好两份文件：
+
+```bash
+node apply-liangshen-workflow-engine-patch.mjs
+```
+
+它幂等且自校验（退出码 0 才代表真的生效），并且是**逐行定点替换**而非整目录镜像。
+后者在改过插件设置的主机上是错的：`sync.ts` 会把运维者的选择作为覆盖写入同步副本，
+而唯一被覆盖的键就是 `tool-catalog` 行的 `presentation`；整目录镜像会把它退回出厂默认
+（`'both'`），直到下次 mount 重新覆盖回来。定点替换不动其它任何行，并让同步副本正好落在
+`sync.ts` 的不动点（`synced == render(source, overlay)`）上，插件于是判定为 `current` 而不会
+把修复重新同步掉。

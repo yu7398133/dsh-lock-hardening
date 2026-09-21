@@ -79,6 +79,10 @@ node apply-atomic-write-patch.mjs
 The plugin layer keeps working regardless; if you forget, recovery is simply delayed by up
 to one sweep interval.
 
+A plugin update does the same to the liangshen fix — it restores the broken row inside
+`@linxin666/dsh-liangshen` and the plugin re-syncs that copy into `$DSH_HOME/.agent-presets/`.
+`node apply-liangshen-workflow-engine-patch.mjs` puts it back (see [patches/README.md](patches/README.md)).
+
 ## Verify
 
 ```bash
@@ -103,6 +107,7 @@ cat "$DSH_HOME/lock-sweeper/status.json"
 | `apply-atomic-write-patch.mjs` | The fix: idempotent, self-verifying patch |
 | `atomic-write-reclaim.patch` | The raw diff against `dsh-atomic-write` 0.1.6-alpha.2 |
 | `patches/liangshen-workflow-engine.patch` | Fix for an unrelated third-party plugin (`@linxin666/dsh-liangshen`) |
+| `apply-liangshen-workflow-engine-patch.mjs` | Upgrade-surviving re-apply helper for that fix: patches both preset copies, self-verifying, exit 0 only when verified |
 | `patches/README.md` | The liangshen write-up: the one-line fix, the preset re-sync, the duplicate-mount trap, upstream status |
 | `patches/liangshen-evidence.png` | Evidence screenshot for the liangshen report |
 | `plugin/lock-sweeper.mjs` | Recovery layer that survives upgrades |

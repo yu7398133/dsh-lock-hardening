@@ -80,6 +80,30 @@ diff -r "$PKG" "$SYNC" && echo synced
 
 The plugin re-syncs on every mount, so this is only needed to take effect without a restart.
 
+### Re-applying after an upgrade
+
+A plugin update reinstalls `node_modules` and brings the broken row back, so this fix has to be
+re-applied. `apply-liangshen-workflow-engine-patch.mjs` (repository root) does both files at
+once and is the durable copy to keep:
+
+```bash
+node apply-liangshen-workflow-engine-patch.mjs
+```
+
+It is idempotent, and self-verifying: it exits 0 only when the row is swapped in both copies,
+the engine row is present/enabled and **no other line changed**.
+
+Note that it swaps the row in place rather than mirroring the tree, which is deliberate. On a
+host whose operator has changed the plugin's settings, the mirror snippet above is wrong:
+`sync.ts` writes the operator's choices into the synced tree as an overlay, and the only
+overlaid key is the `tool-catalog` row's `presentation`. Mirroring the packaged tree over the
+synced one reverts `presentation` to the shipped default (`'both'`) until the next mount
+re-applies the overlay. Swapping one row leaves every other line alone, and it lands the synced
+copy exactly on `sync.ts`'s fixed point — `synced == render(source, overlay)` — so the plugin
+reports the preset `current` instead of re-syncing the fix away. The script checks that
+equality, against every profile's source, because several plugin versions can coexist behind
+the one global synced copy.
+
 ### Reporting it upstream
 
 Filed to the source repository (zhu1090093659/dsh-web — what the npm package's `repository` field
