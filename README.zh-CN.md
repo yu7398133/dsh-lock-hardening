@@ -100,7 +100,7 @@ cat /vol1/@appdata/deepseek.harness/dsh-data/lock-sweeper/status.json
    修法是换成实际存在的 `@deepseek-ai/dsh-workflow-ptc`（与 dsh 自带 `standard` 预设同一行）。
 2. **插件被挂载两次**：包一旦回到 `dsh.profile.bundles`，它自带的 loader 行就会生效；此时用户层
    再补一行就变成"重复启用插件"。**一个包只能有一个挂载点**，可用
-   `dsh --profile web --dump-config | grep -cE '^- id: liangshen`' 验证（应为 1）。
+   `dsh --profile web --dump-config | grep -cE '^- id: liangshen'` 验证（应为 1）。
 
 注意：插件 mount 时会把预设复制到 `$DSH_HOME/.agent-presets/liangshen/`，session 实际读的是那份副本；
 改完包内文件必须让副本重新同步，否则会误以为"改了没用"。
