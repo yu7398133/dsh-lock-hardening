@@ -8,8 +8,10 @@ Two fixes that share nothing but the repository.
 
 **Target:** `@linxin666/dsh-liangshen` — `presets/liangshen/agent.cordis.yml` (in the source repo:
 `packages/dsh-liangshen/presets/liangshen/agent.cordis.yml`)
-**Verified against:** `0.3.23` and `0.3.24` — the bug is still present in 0.3.24 (published
-2026-09-20) and on the upstream `dev` branch — on `dsh@0.1.6-alpha.2`
+**Status: fixed upstream.** `0.4.0` (2026-09-23) replaced the row with `workflow-ptc`, exactly as this
+patch does; `dev` and `main` no longer contain the bad name. **This patch is retained for 0.3.x only —
+do not apply it to 0.4.x.**
+**Verified against:** `0.3.23`/`0.3.24` (broken) and `0.4.1` (fixed) on `dsh@0.1.6-alpha.2`
 
 The preset's roster names a workflow engine that does not exist:
 
@@ -122,8 +124,10 @@ The timeline (`created 13:44:58` → `labeled 13:45:05` → `closed 13:45:07`, ~
 at the job reading `context.payload.issue` before the body and labels were attached, rather than at
 a malformed report.
 
-Both issues are closed and an outside author cannot reopen them, so **the fix is only available
-from here**. The upstream `dev` branch still carries the broken row as of `d2361c8365`.
+**Outcome: fixed upstream.** `0.4.0` (published 2026-09-23, three days after the report) carries the working row,
+and `dev`/`main` are clean as of `80967197a7`. Neither issue received a human reply — both were
+closed by the enforcer within seconds and an outside author cannot reopen them, so whether the
+report contributed is unknown. The patch above remains useful only for pinning 0.3.x.
 
 ---
 
