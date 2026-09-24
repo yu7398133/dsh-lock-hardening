@@ -82,6 +82,14 @@ diff -r "$PKG" "$SYNC" && echo synced
 
 The plugin re-syncs on every mount, so this is only needed to take effect without a restart.
 
+```text
+Observed on the 0.4.1 upgrade (2026-09-24): the package on disk became 0.4.1 — a 450-line preset
+plus the new fact-ledger.mjs and guard.mjs — while
+$DSH_HOME/.agent-presets/liangshen/ still held the 421-line 0.3.24-era copy. The host had already
+been restarted after the install, so only the copy was stale; the live preset was silently missing
+two modules. The copy does not follow the package on its own.
+```
+
 ### Re-applying after an upgrade
 
 A plugin update reinstalls `node_modules` and brings the broken row back, so this fix has to be
